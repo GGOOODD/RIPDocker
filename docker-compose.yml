@@ -1,0 +1,36 @@
+networks:
+  dev:
+
+services:
+  app:
+    build:
+      context: ./Dockersrc
+    container_name: fastapi_app
+    volumes:
+      - ./docker/db-data:/fastapi_app/data
+    networks:
+      - dev
+
+  web_socket:
+    build:
+      context: ./Dockersocket
+    container_name: fastapi_web_socket
+    volumes:
+      - ./docker/db-data:/fastapi_web_socket/data
+    depends_on:
+      - app
+    networks:
+      - dev
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx_proxy
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 8000:80
+    depends_on:
+      - app
+      - web_socket
+    networks:
+      - dev
