@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api import router as api_router
+from chat import router as chat_router
 from contextlib import asynccontextmanager
 from database import create_tables
 import os
@@ -8,19 +9,18 @@ import os
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    if not os.path.isfile("site.db"):
+    if not os.path.isfile("./site.db"):
         await create_tables()
     yield
 
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(api_router)
+app.include_router(chat_router)
 
 origins = [
     "http://localhost:3000",
-    "localhost:3000",
-    "http://172.20.0.1:80",
-    "172.20.0.1:80"
+    "localhost:3000"
 ]
 
 app.add_middleware(
