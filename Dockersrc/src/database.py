@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey
 
-engine = create_async_engine("sqlite+aiosqlite:///./site.db")
+engine = create_async_engine("sqlite+aiosqlite:///./data/site.db")
 new_session = async_sessionmaker(engine, expire_on_commit=False)
 
 
